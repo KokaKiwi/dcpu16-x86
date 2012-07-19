@@ -4,20 +4,21 @@ void *memcpy(void *destination, const void *source, size_t num)
 {
     while (num--)
     {
-        *((char *) destination) = *((char *) source);
+        *((char *) destination++) = *((const char *) source++);
     }
     
     return destination;
 }
 
-void *memset(void *ptr, unsigned value, size_t num)
+void *memset(void *p, unsigned c, size_t n)
 {
-    while (num--)
+    char *pb = (char *) p;
+    char *pbend = pb + n;
+    while (pb != pbend)
     {
-        *((unsigned *) ptr++) = value;
+        *pb++ = c;
     }
-    
-    return ptr;
+    return p;
 }
 
 int memcmp(const void *ptr1, const void *ptr2, size_t num)

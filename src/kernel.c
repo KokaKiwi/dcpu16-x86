@@ -36,7 +36,6 @@ void _main(struct multiboot_info *mbi)
     load_sp();
     load_idt();
     load_pic();
-    
     // Load vars
     // + Get DCPU Program size
     dcpu_program_size = dcpu_program_end - dcpu_program;

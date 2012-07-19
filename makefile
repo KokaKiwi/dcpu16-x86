@@ -1,7 +1,8 @@
 export BOCHS	:= /usr/fbin/bochs
 export NASM		:= nasm
 export CC		:= gcc
-export CCFLAGS	:= -c -g -nostartfiles -fno-builtin -Iinclude
+export CCFLAGS	:= -c -O3 -Os -g -nostartfiles -fno-builtin -Iinclude
+export CAFLAGS	:= -S -O3 -Os -nostartfiles -fno-builtin -Iinclude
 export OBJCOPY	:= objcopy
 export LD		:= ld
 export LDFLAGS	:= -g
@@ -10,6 +11,7 @@ export BUILDDIR	:= target
 
 export O		:= .o
 B				:= $(BUILDDIR)/
+S				:= $Basm/
 
 OBJS			:= $Bbootsect $Bkernel
 
@@ -19,11 +21,16 @@ run 			: bochs
 # Compile
 # + Bootsect
 bootsect:
+	mkdir -p $(BUILDDIR)
 	make -C boot
 
 # + Kernel
 kernel		:
-	make -C src
+	make -C src compile
+
+asm			:
+	mkdir -p $S
+	make -C src asm
 
 # + Floppy
 floppy			: floppyA
@@ -36,4 +43,5 @@ bochs			:
 	
 # Clean
 clean			:
+	rm -f $(wildcard $S*)
 	rm -f $(wildcard $B*)
