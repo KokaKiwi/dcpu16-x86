@@ -1,3 +1,5 @@
+[BITS 16]
+
 global _dcpu_program, _dcpu_program_end
 
 _dcpu_program:

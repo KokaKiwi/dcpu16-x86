@@ -1,12 +1,4 @@
-NASM=/usr/sbin/nasm
-BOCHS=/usr/fbin/bochs
-CC=cc
-CCFLAGS=-c
-OBJCOPY=objcopy
-LD=ld
-O=.o
-BUILDDIR=../target
-B=$(BUILDDIR)/
+B=../$(BUILDDIR)/
 
 compile: $Bbootsect
 

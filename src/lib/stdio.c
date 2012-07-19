@@ -86,6 +86,13 @@ void printf(const char *format, ...)
                     case 'u':
                         printf_putu(va_arg(args, unsigned), 10);
                         break;
+                    case 'l':
+                        if (*format == 'd')
+                        {
+                            printf_putu(va_arg(args, unsigned long), 10);
+                            format++;
+                        }
+                        break;
                     case 'x':
                         printf_putu(va_arg(args, unsigned), 16);
                         break;
@@ -96,15 +103,11 @@ void printf(const char *format, ...)
                         printf_putu(va_arg(args, unsigned), 2);
                         break;
                     case 's':
-                        print(va_arg(args, char *) );
+                        print(va_arg(args, char *));
                         break;
                     case 'c':
                         putchar(va_arg(args, unsigned));
                         break;
-                }
-                if (++i == 2)
-                {
-                    args++;
                 }
                 break;
             default:
@@ -112,6 +115,8 @@ void printf(const char *format, ...)
                 break;
         }
     }
+    
+    va_end(args);
 }
 
 void print(const char *str)

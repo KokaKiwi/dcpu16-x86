@@ -12,8 +12,6 @@
 #include "color.h"
 #include "kernel.h"
 
-unsigned dcpu_program_size;
-
 void load_gdt(void);
 void load_sp(void);
 void load_pic(void);
@@ -37,8 +35,6 @@ void _main(struct multiboot_info *mbi)
     load_idt();
     load_pic();
     // Load vars
-    // + Get DCPU Program size
-    dcpu_program_size = dcpu_program_end - dcpu_program;
     // Load default key handler
     keyhandler = &std_keyhandler;
     
