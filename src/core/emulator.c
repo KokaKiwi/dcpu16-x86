@@ -1,5 +1,6 @@
 #include "emulator.h"
 #include "dcpu_opcodes.h"
+#include "stdio.h"
 #include "string.h"
 
 #define opcode(handler) handler,
@@ -114,7 +115,7 @@ uchar dcpu16_get_pointer(dcpu16_t *cpu, uchar addr, dcpuw_t *tmp_storage,
                 break;
                 
             case DCPU16_AB_VALUE_WORD:
-                *retval = &cpu->ram[cpu->registers[DCPU16_REG_PC]];
+                *retval = &cpu->ram[cpu->registers[DCPU16_REG_PC]++];
                 cycles = 1;
                 break;
         }
@@ -154,34 +155,81 @@ void dcpu16_init(dcpu16_t *cpu)
     memset(cpu, 0, sizeof(dcpu16_t));
 }
 
+void dcpu16_ramcpy(dcpu16_t *cpu, dcpuw_t *src, dcpuw_t offset, size_t length)
+{
+    dcpuw_t tmp;
+    dcpuw_t *dest = &cpu->ram[offset];
+    
+    while (length--)
+    {
+        tmp = *src++;
+        
+        *dest++ = DCPU16_WORD(tmp);
+    }
+}
+
 uchar dcpu16_step(dcpu16_t *cpu)
 {
     uchar cycles = 0;
-    dcpuw_t opword, opcode, a, b;
+    dcpuw_t opword;
+    uchar opcode, a, b;
     dcpuw_t tmp_a, tmp_b, *aw, *bw;
+    dcpuw_t pc;
     
-    opword = cpu->ram[cpu->registers[DCPU16_REG_PC]++];
+    pc = cpu->registers[DCPU16_REG_PC]++;
+    opword = cpu->ram[pc];
+    
     opcode = opword & 0x1f;
+    
+#ifdef __DCPU16_EXEC_DEBUG__
+    printf("0x%x: ", pc);
+#endif
     
     if (opcode)
     {
         b = (opword >> 5) & 0x1f;
         a = (opword >> 10) & 0x3f;
         
-        cycles += dcpu16_get_pointer(cpu, a, &tmp_a, &aw, 1);
-        cycles += dcpu16_get_pointer(cpu, b, &tmp_b, &bw, 0);
+#ifdef __DCPU16_EXEC_DEBUG__
+        printf("basic-0x%x", opcode);
+#endif
         
-        cycles += basic_opcode_handlers[opcode](cpu, a, b, aw, bw);
+        if (basic_opcode_handlers[opcode])
+        {
+            cycles += dcpu16_get_pointer(cpu, a, &tmp_a, &aw, 1);
+            cycles += dcpu16_get_pointer(cpu, b, &tmp_b, &bw, 0);
+            
+#ifdef __DCPU16_EXEC_DEBUG__
+            printf(" a[0x%x] aw[0x%x] - b[0x%x] bw[0x%x]", a, *aw, b, *bw);
+#endif
+            
+            cycles += basic_opcode_handlers[opcode](cpu, a, b, aw, bw);
+        }
     }
     else
     {
         opcode = (opword >> 5) & 0x1f;
         a = (opword >> 10) & 0x3f;
         
-        cycles += dcpu16_get_pointer(cpu, a, &tmp_a, &aw, 1);
+#ifdef __DCPU16_EXEC_DEBUG__
+        printf("special-0x%x", opcode);
+#endif
         
-        cycles += special_opcode_handlers[opcode](cpu, a, aw);
+        if (special_opcode_handlers[opcode])
+        {
+            cycles += dcpu16_get_pointer(cpu, a, &tmp_a, &aw, 1);
+            
+#ifdef __DCPU16_EXEC_DEBUG__
+            printf(" a[0x%x] aw[0x%x]", a, *aw);
+#endif
+            
+            cycles += special_opcode_handlers[opcode](cpu, a, aw);
+        }
     }
+    
+#ifdef __DCPU16_EXEC_DEBUG__
+    putchar('\n');
+#endif
     
     return cycles;
 }
@@ -208,5 +256,30 @@ void dcpu16_skip_next_instruction(dcpu16_t *cpu)
         a = (opword >> 10) & 0x3f;
         
         dcpu16_get_pointer(cpu, a, 0, &aw, 1);
+    }
+}
+
+void dcpu16_printreg(dcpu16_t *cpu, char *name, char index, char print_ptr)
+{
+    print(name);
+    screenX = 3;
+    printf(": 0x%x", cpu->registers[index]);
+    if (print_ptr)
+    {
+        screenX = 15;
+        printf("[%s]", name);
+        screenX = 20;
+        printf(": 0x%x", cpu->ram[cpu->registers[index]]);
+    }
+    putchar('\n');
+}
+
+void dcpu16_dumpram(dcpu16_t *cpu, size_t length)
+{
+    int i;
+    
+    for (i = 0; i < length; i++)
+    {
+        printf("%x", cpu->ram[cpu->registers[DCPU16_REG_PC] + i]);
     }
 }

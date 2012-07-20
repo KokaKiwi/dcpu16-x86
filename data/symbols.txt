@@ -1,0 +1,3 @@
+_binary____data_disk_bin_start _dcpu_program_start
+_binary____data_disk_bin_end _dcpu_program_end
+_binary____data_disk_bin_size _dcpu_program_size

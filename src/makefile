@@ -34,13 +34,14 @@ compile                  : $Bkernel
 
 $Bkernel                 : $Bkernel.out ; $(OBJCOPY) -O binary $^ $@
 
-$Bkernel.out             : $Bboot$O $Bkernel$O $(ALL_OBJS) ; $(LD) -Ttext 1000 --entry=_start -s -o $@ $Bboot$O $Bkernel$O $(ALL_OBJS)
+$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -o $@ $Bkernel$O $Bprogram$O $(ALL_OBJS)
 
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_c,$(srcdir))))
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_a,$(srcdir))))
 
 $Bboot$O                 : boot.asm; $(NASM) -f elf -o $@ $^
 $Bkernel$O               : kernel.c; $(CC) $(CCFLAGS) -o $@ $^
+$Bprogram$O              : ../data/disk.bin ; $(OBJCOPY) -I binary -O elf32-i386 -B i386 --redefine-syms=../data/symbols.txt $^ $@
 
 asm                      : $Skernel.asm $(ALL_ASMS)
 

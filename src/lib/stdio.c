@@ -29,18 +29,19 @@ void putchar(char c)
     }
 }
 
-void printf_putu(unsigned d, unsigned base)
+void printf_putu(unsigned d, unsigned int radix)
 {
-    static char buf[16];
-    unsigned i = 0;
+    static char buf[16] = { 0 };
+    unsigned i = 0, index = 0;
     
     if (d)
     {
         while (d)
         {
-            buf[i++] = "0123456789abcdef"[d % base];
+            index = (unsigned) (d % radix);
+            d /= radix;
             
-            d /= base;
+            buf[i++] = "0123456789abcdef"[index];
         }
         
         while (i--)
@@ -54,7 +55,7 @@ void printf_putu(unsigned d, unsigned base)
     }
 }
 
-void printf_putd(int d, unsigned base)
+void printf_putd(int d, unsigned radix)
 {
     if (d < 0)
     {
@@ -62,60 +63,58 @@ void printf_putd(int d, unsigned base)
         d = -d;
     }
     
-    printf_putu(d, base);
+    printf_putu(d, radix);
 }
 
 void printf(const char *format, ...)
 {
     va_list args;
-    char c;
-    unsigned i = 0;
+    char c = 0;
     
     va_start(args, format);
     
     while ((c = *format++))
     {
-        switch (c)
+        if (c == '%')
         {
-            case '%':
-                switch (*format++)
-                {
-                    case 'd':
-                        printf_putd(va_arg(args, int), 10);
-                        break;
-                    case 'u':
-                        printf_putu(va_arg(args, unsigned), 10);
-                        break;
-                    case 'l':
-                        if (*format == 'd')
-                        {
-                            printf_putu(va_arg(args, unsigned long), 10);
-                            format++;
-                        }
-                        break;
-                    case 'x':
-                        printf_putu(va_arg(args, unsigned), 16);
-                        break;
-                    case 'o':
-                        printf_putu(va_arg(args, unsigned), 8);
-                        break;
-                    case 'b':
-                        printf_putu(va_arg(args, unsigned), 2);
-                        break;
-                    case 's':
-                        print(va_arg(args, char *));
-                        break;
-                    case 'c':
-                        putchar(va_arg(args, unsigned));
-                        break;
-                }
-                break;
-            default:
-                putchar(c);
-                break;
+            switch (*format++)
+            {
+                case 'd':
+                    printf_putd(va_arg(args, int), 10);
+                    break;
+                case 'u':
+                    printf_putu(va_arg(args, unsigned int), 10);
+                    break;
+                case 'l':
+                    if (*format == 'd')
+                    {
+                        printf_putu(va_arg(args, unsigned long int), 10);
+                        format++;
+                    }
+                    break;
+                case 'x':
+                    printf_putu(va_arg(args, unsigned int), 16);
+                    break;
+                case 'o':
+                    printf_putu(va_arg(args, unsigned int), 8);
+                    break;
+                case 'b':
+                    printf_putu(va_arg(args, unsigned int), 2);
+                    break;
+                case 's':
+                    print(va_arg(args, char *));
+                    break;
+                case 'c':
+                    putchar(va_arg(args, unsigned int));
+                    break;
+            }
+        }
+        else
+        {
+            putchar(c);
         }
     }
-    
+
     va_end(args);
 }
 

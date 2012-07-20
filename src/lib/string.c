@@ -4,7 +4,7 @@ void *memcpy(void *destination, const void *source, size_t num)
 {
     while (num--)
     {
-        *((char *) destination++) = *((const char *) source++);
+        *((uchar *) destination++) = *((const uchar *) source++);
     }
     
     return destination;
@@ -12,8 +12,8 @@ void *memcpy(void *destination, const void *source, size_t num)
 
 void *memset(void *p, unsigned c, size_t n)
 {
-    char *pb = (char *) p;
-    char *pbend = pb + n;
+    uchar *pb = (uchar *) p;
+    uchar *pbend = pb + n;
     while (pb != pbend)
     {
         *pb++ = c;
@@ -23,14 +23,14 @@ void *memset(void *p, unsigned c, size_t n)
 
 int memcmp(const void *ptr1, const void *ptr2, size_t num)
 {
-    const char *p1 = ptr1;
-    const char *p2 = ptr2;
+    const uchar *p1 = ptr1;
+    const uchar *p2 = ptr2;
     
     while (num-- && (*p1++ == *p2++))
         ;
     
-    return (*(unsigned char *) --p1 < *(unsigned char *) --p2) ?
-            -1 : (*(unsigned char *) p1 != *(unsigned char *) p2);
+    return (*(uchar *) --p1 < *(uchar *) --p2) ?
+            -1 : (*(uchar *) p1 != *(uchar *) p2);
 }
 
 char *strcpy(char *destination, const char *source)

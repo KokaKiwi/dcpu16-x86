@@ -39,9 +39,9 @@ floppyA			: $(OBJS) ; cat $(OBJS) /dev/zero | dd of=floppyA bs=512 count=2880
 
 # Bochs
 bochs			:
-	$(BOCHS)
+	$(BOCHS) -f bochsrc.bxrc
 	
 # Clean
 clean			:
+	rm -f $(wildcard $B*.*)
 	rm -f $(wildcard $S*)
-	rm -f $(wildcard $B*)

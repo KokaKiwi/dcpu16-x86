@@ -3,7 +3,10 @@
 
 #include "types.h"
 
-extern void *dcpu_program;
-extern void *dcpu_program_end;
+extern uchar dcpu_program_start;
+extern uchar dcpu_program_end;
+extern unsigned long dcpu_program_size;
+
+extern void ok_msg(void);
 
 #endif

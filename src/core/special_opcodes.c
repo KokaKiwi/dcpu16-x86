@@ -2,7 +2,7 @@
 #include "special_opcodes.h"
 #include "types.h"
 
-uchar dcpu16_handle_opJSR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opJSR(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     cpu->registers[DCPU16_REG_SP]--;
     cpu->ram[cpu->registers[DCPU16_REG_SP]] = cpu->registers[DCPU16_REG_PC];
@@ -12,26 +12,26 @@ uchar dcpu16_handle_opJSR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
     return 3;
 }
 
-uchar dcpu16_handle_opINT(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opINT(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     return 4;
 }
 
-uchar dcpu16_handle_opIAG(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opIAG(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     dcpu16_set(cpu, aw, cpu->registers[DCPU16_REG_IA]);
     
     return 1;
 }
 
-uchar dcpu16_handle_opIAS(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opIAS(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_IA], *aw);
     
     return 1;
 }
 
-uchar dcpu16_handle_opRFI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opRFI(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     // Pop A and PC
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_A],
@@ -45,7 +45,7 @@ uchar dcpu16_handle_opRFI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
     return 3;
 }
 
-uchar dcpu16_handle_opIAQ(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opIAQ(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     if (*aw)
     {
@@ -59,7 +59,7 @@ uchar dcpu16_handle_opIAQ(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
     return 2;
 }
 
-uchar dcpu16_handle_opHWN(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opHWN(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     dcpuw_t connected_hardwares = 0;
     uchar i;
@@ -77,7 +77,7 @@ uchar dcpu16_handle_opHWN(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
     return 2;
 }
 
-uchar dcpu16_handle_opHWQ(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opHWQ(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     dcpuw_t hardware_index;
     dcpu16_hardware_t *hardware;
@@ -101,7 +101,7 @@ uchar dcpu16_handle_opHWQ(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
     return 4;
 }
 
-uchar dcpu16_handle_opHWI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t *aw)
+uchar dcpu16_handle_opHWI(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     uchar cycles = 4;
     

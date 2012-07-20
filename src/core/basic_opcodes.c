@@ -2,14 +2,14 @@
 #include "dcpu_opcodes.h"
 #include "basic_opcodes.h"
 
-uchar dcpu16_handle_opSET(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSET(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw);
     return 1;
 }
 
-uchar dcpu16_handle_opADD(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opADD(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if ((int) *bw + (int) *aw > 0xffff)
@@ -26,7 +26,7 @@ uchar dcpu16_handle_opADD(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 2;
 }
 
-uchar dcpu16_handle_opSUB(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSUB(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if ((int) *bw - (int) *aw < 0)
@@ -43,7 +43,7 @@ uchar dcpu16_handle_opSUB(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 2;
 }
 
-uchar dcpu16_handle_opMUL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opMUL(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_EX],
@@ -53,7 +53,7 @@ uchar dcpu16_handle_opMUL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 2;
 }
 
-uchar dcpu16_handle_opMLI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opMLI(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_EX],
@@ -63,7 +63,7 @@ uchar dcpu16_handle_opMLI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 2;
 }
 
-uchar dcpu16_handle_opDIV(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opDIV(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if (*aw)
@@ -81,7 +81,7 @@ uchar dcpu16_handle_opDIV(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opDVI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opDVI(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if ((dcpusw_t) *aw)
@@ -99,7 +99,7 @@ uchar dcpu16_handle_opDVI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opMOD(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opMOD(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if (*aw)
@@ -114,7 +114,7 @@ uchar dcpu16_handle_opMOD(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opMDI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opMDI(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if (*aw)
@@ -129,7 +129,7 @@ uchar dcpu16_handle_opMDI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opAND(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opAND(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw & *bw);
@@ -137,7 +137,7 @@ uchar dcpu16_handle_opAND(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opBOR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opBOR(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw | *bw);
@@ -145,7 +145,7 @@ uchar dcpu16_handle_opBOR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opXOR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opXOR(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw ^ *bw);
@@ -153,7 +153,7 @@ uchar dcpu16_handle_opXOR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opSHR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSHR(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_EX],
@@ -163,7 +163,7 @@ uchar dcpu16_handle_opSHR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opASR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opASR(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_EX],
@@ -173,7 +173,7 @@ uchar dcpu16_handle_opASR(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opSHL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSHL(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, &cpu->registers[DCPU16_REG_EX],
@@ -183,7 +183,7 @@ uchar dcpu16_handle_opSHL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 1;
 }
 
-uchar dcpu16_handle_opIFB(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFB(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -197,7 +197,7 @@ uchar dcpu16_handle_opIFB(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFC(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFC(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -211,7 +211,7 @@ uchar dcpu16_handle_opIFC(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFE(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFE(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -225,7 +225,7 @@ uchar dcpu16_handle_opIFE(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFN(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFN(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -239,7 +239,7 @@ uchar dcpu16_handle_opIFN(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFG(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFG(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -253,7 +253,7 @@ uchar dcpu16_handle_opIFG(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFA(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFA(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -267,7 +267,7 @@ uchar dcpu16_handle_opIFA(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFL(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -281,7 +281,7 @@ uchar dcpu16_handle_opIFL(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opIFU(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opIFU(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     uchar cycles = 2;
@@ -295,7 +295,7 @@ uchar dcpu16_handle_opIFU(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return cycles;
 }
 
-uchar dcpu16_handle_opADX(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opADX(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if ((int) *bw + (int) *aw + (int) cpu->registers[DCPU16_REG_EX] > 0xffff)
@@ -312,7 +312,7 @@ uchar dcpu16_handle_opADX(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opSBX(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSBX(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     if ((int) *bw - (int) *aw + (int) cpu->registers[DCPU16_REG_EX] < 0)
@@ -329,7 +329,7 @@ uchar dcpu16_handle_opSBX(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 3;
 }
 
-uchar dcpu16_handle_opSTI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSTI(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw);
@@ -339,7 +339,7 @@ uchar dcpu16_handle_opSTI(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
     return 2;
 }
 
-uchar dcpu16_handle_opSTD(dcpu16_t *cpu, dcpuw_t a, dcpuw_t b, dcpuw_t *aw,
+uchar dcpu16_handle_opSTD(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)
 {
     dcpu16_set(cpu, bw, *aw);
