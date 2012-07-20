@@ -17,11 +17,6 @@ void kernel()
     dcpu16_ramcpy(&cpu, p, 0, size);
     ok_msg();
     
-    for(i = 0; i < 16; i++)
-    {
-        dcpu16_step(&cpu);
-    }
-    
 #ifdef __DEBUG__
     dcpu16_printreg(&cpu, "A", DCPU16_REG_A, 1);
     dcpu16_printreg(&cpu, "B", DCPU16_REG_B, 1);

@@ -2,6 +2,7 @@
 #include "dcpu_opcodes.h"
 #include "stdio.h"
 #include "string.h"
+#include "endian.h"
 
 #define opcode(handler) handler,
 
@@ -164,7 +165,14 @@ void dcpu16_ramcpy(dcpu16_t *cpu, dcpuw_t *src, dcpuw_t offset, size_t length)
     {
         tmp = *src++;
         
-        *dest++ = DCPU16_WORD(tmp);
+        if (IS_LITTLE_ENDIAN)
+        {
+            *dest++ = DCPU16_WORD(tmp);
+        }
+        else
+        {
+            *dest++ = tmp;
+        }
     }
 }
 
