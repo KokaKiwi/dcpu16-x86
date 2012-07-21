@@ -62,7 +62,7 @@ uchar dcpu16_handle_opIAQ(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 uchar dcpu16_handle_opHWN(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
     dcpuw_t connected_hardwares = 0;
-    uchar i;
+    u16 i;
     
     for (i = 0; i < DCPU16_HARDWARE_SLOTS; i++)
     {
@@ -72,7 +72,7 @@ uchar dcpu16_handle_opHWN(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
         }
     }
     
-    dcpu16_set(cpu, &cpu->registers[DCPU16_REG_A], connected_hardwares);
+    dcpu16_set(cpu, aw, connected_hardwares);
     
     return 2;
 }

@@ -5,10 +5,9 @@
 
 #define __KEYMAP_AZERTY__
 
-#ifdef __KEYMAP_QWERTY__
+#if defined(__KEYMAP_QWERTY__)
 #include "keymap/qwerty.h"
-#endif
-#ifdef __KEYMAP_AZERTY__
+#elif defined(__KEYMAP_AZERTY__)
 #include "keymap/azerty.h"
 #endif
 

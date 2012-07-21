@@ -4,6 +4,8 @@
 #include "string.h"
 #include "endian.h"
 
+//#define __DCPU16_EXEC_DEBUG__
+
 #define opcode(handler) handler,
 
 #define BASIC_OPCODES

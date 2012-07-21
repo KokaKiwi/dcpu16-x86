@@ -6,16 +6,24 @@
 
 dcpu16_t cpu;
 
+#define __DEBUG__
+
 void kernel()
 {
     dcpuw_t *p = (dcpuw_t *) &dcpu_program_start;
     char *c = (char *) &dcpu_program_start;
     unsigned long int size = (unsigned long int) &dcpu_program_size;
-    int i;
+    u16 i;
     
     print("Loading DCPU-16 program...");
     dcpu16_ramcpy(&cpu, p, 0, size);
     ok_msg();
+    show_cursor();
+    
+    for (i = 0; i < 1024; i++)
+    {
+        dcpu16_step(&cpu);
+    }
     
 #ifdef __DEBUG__
     dcpu16_printreg(&cpu, "A", DCPU16_REG_A, 1);
@@ -30,10 +38,6 @@ void kernel()
     dcpu16_printreg(&cpu, "SP", DCPU16_REG_SP, 1);
     dcpu16_printreg(&cpu, "IA", DCPU16_REG_IA, 0);
     dcpu16_printreg(&cpu, "EX", DCPU16_REG_EX, 0);
-
-    print("Dump: ");
-    dcpu16_dumpram(&cpu, 16);
-    putchar('\n');
 #endif
     
     show_cursor();
