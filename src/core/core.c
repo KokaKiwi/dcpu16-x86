@@ -4,17 +4,13 @@
 #include "emulator.h"
 #include "core.h"
 
-//dcpu16_t *cpu = (dcpu16_t *) 0xb0000;
-dcpu16_t dcpu;
-
-#define __DEBUG__
+//#define __DEBUG__
 
 void kernel()
 {
-    dcpuw_t *p = (dcpuw_t *) &dcpu_program_start;
-    char *c = (char *) &dcpu_program_start;
+    dcpuw_t *p = &dcpu_program_start;
     unsigned long int size = (unsigned long int) &dcpu_program_size;
-    dcpu16_t *cpu = (dcpu16_t *) 0xff000;
+    dcpu16_t *cpu = (dcpu16_t *) 0x100000;
     u16 i;
     
     print("Initializing DCPU-16...");
@@ -23,12 +19,10 @@ void kernel()
     
     print("Loading DCPU-16 program...");
     dcpu16_ramcpy(cpu, p, 0, size);
-//    ok_msg();
-//    show_cursor();
+    ok_msg();
+    show_cursor();
     
-    printf("[0x%x] = 0x%x\n", &cpu->ram[0], cpu->ram[0]);
-    
-    for (i = 0; i < 5; i++)
+    while(1)
     {
         dcpu16_step(cpu);
     }

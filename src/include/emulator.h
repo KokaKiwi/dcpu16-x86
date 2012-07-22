@@ -123,12 +123,12 @@ struct _dcpu16_t
         dcpu16_ram_listener *ram_listener;
     } listeners;
     
-    dcpuw_t registers[DCPU16_REGISTER_COUNT];
-    dcpuw_t ram[DCPU16_RAM_SIZE];
-    dcpu16_hardware_t hardware[DCPU16_HARDWARE_SLOTS];
-    
     dcpu16_interrupt_queue interrupt_queue;
     uchar interrupts_enabled;
+    
+    dcpuw_t registers[DCPU16_REGISTER_COUNT];
+    dcpu16_hardware_t hardware[DCPU16_HARDWARE_SLOTS];
+    dcpuw_t ram[DCPU16_RAM_SIZE];
 }__attribute__((packed));
 
 extern void dcpu16_set(dcpu16_t *, dcpuw_t *, dcpuw_t);
