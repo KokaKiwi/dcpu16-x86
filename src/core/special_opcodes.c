@@ -72,6 +72,8 @@ uchar dcpu16_handle_opHWN(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
         }
     }
     
+    //printf("%u connected hardwares.\n", connected_hardwares);
+    
     dcpu16_set(cpu, aw, connected_hardwares);
     
     return 2;

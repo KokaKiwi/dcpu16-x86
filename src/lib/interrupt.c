@@ -18,6 +18,7 @@ void isr_GP_exec()
 {
     mask = COLOR_RED | BG_CYAN;
     println("GP fault");
+    show_cursor();
     asm("hlt");
 }
 

@@ -41,7 +41,7 @@ typedef signed short dcpusw_t;
 #define DCPU16_AB_VALUE_WORD                0x1f
 
 /* REGISTERS */
-#define DCPU16_REGISTER_COUNT               12
+#define DCPU16_REGISTER_COUNT               0xc
 #define DCPU16_REG_A                        0x0
 #define DCPU16_REG_B                        0x1
 #define DCPU16_REG_C                        0x2
@@ -55,7 +55,7 @@ typedef signed short dcpusw_t;
 #define DCPU16_REG_EX                       0xa
 #define DCPU16_REG_IA                       0xb
 
-#define DCPU16_RAM_SIZE                     0x10000
+#define DCPU16_RAM_SIZE                     0xffff
 #define DCPU16_HARDWARE_SLOTS               0xffff
 #define DCPU16_MAX_INTERRUPT_QUEUE_LENGTH   256
 
@@ -75,12 +75,12 @@ typedef uchar (*special_opcode_handler)(dcpu16_t *, uchar, dcpuw_t *);
 struct _dcpu16_hardware_t
 {
     uchar present;
-    unsigned int id;
-    unsigned short version;
-    unsigned int manufacturer;
+    u32 id;
+    u16 version;
+    u32 manufacturer;
     int (*interrupt)(dcpu16_t *, dcpu16_hardware_t *);
     void *custom;
-};
+}__attribute__((packed));
 
 struct _dcpu16_queued_interrupt_t
 {

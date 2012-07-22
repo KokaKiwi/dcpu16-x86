@@ -4,7 +4,7 @@
 #include "string.h"
 #include "endian.h"
 
-//#define __DCPU16_EXEC_DEBUG__
+#define __DCPU16_EXEC_DEBUG__
 
 #define opcode(handler) handler,
 
@@ -160,22 +160,39 @@ void dcpu16_init(dcpu16_t *cpu)
 
 void dcpu16_ramcpy(dcpu16_t *cpu, dcpuw_t *src, dcpuw_t offset, size_t length)
 {
-    dcpuw_t tmp;
-    dcpuw_t *dest = &cpu->ram[offset];
+//    dcpuw_t tmp;
+//    dcpuw_t *dest = &cpu->ram[offset];
+    u16 i;
     
-    while (length--)
-    {
-        tmp = *src++;
-        
-        if (IS_LITTLE_ENDIAN)
-        {
-            *dest++ = DCPU16_WORD(tmp);
-        }
-        else
-        {
-            *dest++ = tmp;
-        }
-    }
+    printf("Put 0x%x to [0x%x] - %u\n", DCPU16_WORD(src[0]), &cpu->ram[offset], offset);
+    cpu->ram[offset] = DCPU16_WORD(src[0]);
+    printf("[0x%x] = 0x%x\n", &cpu->ram[offset], cpu->ram[offset]);
+    
+//    for (i = 0; i < length; i++)
+//    {
+//        if (IS_LITTLE_ENDIAN)
+//        {
+//            cpu->ram[offset + i] = DCPU16_WORD(src[i]);
+//        }
+//        else
+//        {
+//            cpu->ram[offset + i] = src[i];
+//        }
+//    }
+    
+//    while (length--)
+//    {
+//        tmp = *src++;
+//        
+//        if (IS_LITTLE_ENDIAN)
+//        {
+//            *dest++ = DCPU16_WORD(tmp);
+//        }
+//        else
+//        {
+//            *dest++ = tmp;
+//        }
+//    }
 }
 
 uchar dcpu16_step(dcpu16_t *cpu)
