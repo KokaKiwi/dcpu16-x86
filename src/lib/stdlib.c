@@ -1,6 +1,6 @@
 #include "stdlib.h"
 
-void *heap_start = (void *) 0x6000;
+void *heap_start = (void *) 0x200000;
 
 void *malloc(unsigned long size)
 {

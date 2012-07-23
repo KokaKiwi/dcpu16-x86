@@ -1,7 +1,8 @@
 #ifndef BASIC_OPCODES_H_
 #define BASIC_OPCODES_H_
 
-#include "types.h"
+#include "../types.h"
+#include "emulator.h"
 
 extern uchar dcpu16_handle_opSET(dcpu16_t *, uchar, uchar, dcpuw_t *, dcpuw_t *);
 extern uchar dcpu16_handle_opADD(dcpu16_t *, uchar, uchar, dcpuw_t *, dcpuw_t *);

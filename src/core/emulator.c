@@ -1,5 +1,5 @@
-#include "emulator.h"
-#include "dcpu_opcodes.h"
+#include "dcpu/emulator.h"
+#include "dcpu/dcpu_opcodes.h"
 #include "stdio.h"
 #include "string.h"
 #include "endian.h"
@@ -10,13 +10,13 @@
 
 #define BASIC_OPCODES
 static basic_opcode_handler basic_opcode_handlers[] = {
-#include "dcpu_opcodes.h"
+#include "dcpu/dcpu_opcodes.h"
         };
 #undef BASIC_OPCODES
 
 #define SPECIAL_OPCODES
 static special_opcode_handler special_opcode_handlers[] = {
-#include "dcpu_opcodes.h"
+#include "dcpu/dcpu_opcodes.h"
         };
 #undef SPECIAL_OPCODES
 

@@ -5,6 +5,10 @@
  */
 #include "emulator.h"
 
+#ifndef opcode
+#define opcode(handler) handler,
+#endif
+
 #if defined(BASIC_OPCODES)      // Basic opcodes
 
 opcode(0)                       // 0x00
@@ -81,3 +85,5 @@ opcode(0)                       // 0x1f
 #include "special_opcodes.h"
 
 #endif
+
+#undef opcode

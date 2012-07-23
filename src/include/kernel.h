@@ -2,7 +2,7 @@
 #define KERNEL_H_
 
 #include "types.h"
-#include "emulator.h"
+#include "dcpu/emulator.h"
 
 extern dcpuw_t dcpu_program_start;
 extern uchar dcpu_program_end;

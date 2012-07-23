@@ -1,6 +1,7 @@
-#include "emulator.h"
-#include "dcpu_opcodes.h"
-#include "basic_opcodes.h"
+#include "dcpu/emulator.h"
+#include "dcpu/dcpu_opcodes.h"
+#include "dcpu/basic_opcodes.h"
+#include "types.h"
 
 uchar dcpu16_handle_opSET(dcpu16_t *cpu, uchar a, uchar b, dcpuw_t *aw,
         dcpuw_t *bw)

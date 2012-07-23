@@ -1,33 +1,54 @@
 #include "kernel.h"
+#include "stdlib.h"
 #include "stdio.h"
 #include "stdarg.h"
-#include "emulator.h"
+#include "dcpu/emulator.h"
+#include "dcpu/hardware.h"
 #include "core.h"
 
 //#define __DEBUG__
 
+uchar dcpu16_running = 1;
+
+int debug_int(dcpu16_t *cpu, dcpu16_hardware_t *hw)
+{
+    println("INT");
+    show_cursor();
+    
+    return 1;
+}
+
+void debug_tick(dcpu16_t *cpu, dcpu16_hardware_t *hw)
+{
+    // Tick !
+}
+
+dcpu16_hardware_descriptor_t debug_hardware = { 0x01234567, 0x1234, 0x12345678,
+        debug_int, debug_tick };
+
 void kernel()
 {
-    dcpuw_t *p = &dcpu_program_start;
-    unsigned long int size = (unsigned long int) &dcpu_program_size;
     dcpu16_t *cpu = (dcpu16_t *) 0x100000;
-    u16 i;
     
     print("Initializing DCPU-16...");
     dcpu16_init(cpu);
+    dcpu16_loadhardware(cpu);
     ok_msg();
     
     print("Loading DCPU-16 program...");
-    dcpu16_ramcpy(cpu, p, 0, size);
+    dcpu16_ramcpy(cpu, &dcpu_program_start, 0,
+            (unsigned long int) &dcpu_program_size);
     ok_msg();
     
     println("Starting DCPU-16...");
-
+    
     show_cursor();
     
-    while(1)
+    while (dcpu16_running)
     {
         dcpu16_step(cpu);
+        dcpu16_trigger_interrupt(cpu);
+        dcpu16_tickhardware(cpu);
     }
     
 #ifdef __DEBUG__
@@ -44,6 +65,38 @@ void kernel()
     dcpu16_printreg(cpu, "IA", DCPU16_REG_IA, 0);
     dcpu16_printreg(cpu, "EX", DCPU16_REG_EX, 0);
 #endif
+}
+
+#define HARDWARE_DESCRIPTORS
+dcpu16_hardware_descriptor_t *hardwares[] = {
+#include "dcpu/hardware.h"
+        };
+#undef HARDWARE_DESCRIPTORS
+
+void dcpu16_loadhardware(dcpu16_t *cpu)
+{
+    u16 i;
     
-    show_cursor();
+    for (i = 0; i < HARDWARE_COUNT; i++)
+    {
+        if (hardwares[i])
+        {
+            cpu->hardware[i].descriptor = *hardwares[i];
+            cpu->hardware[i].present = 1;
+        }
+    }
+}
+
+void dcpu16_tickhardware(dcpu16_t *cpu)
+{
+    u16 i;
+    
+    for (i = 0; i < HARDWARE_COUNT; i++)
+    {
+        if (hardwares[i] && cpu->hardware[i].present
+                && cpu->hardware[i].descriptor.tick)
+        {
+            cpu->hardware[i].descriptor.tick(cpu, &cpu->hardware[i]);
+        }
+    }
 }

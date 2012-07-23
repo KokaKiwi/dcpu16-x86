@@ -1,7 +1,8 @@
 #ifndef SPECIAL_OPCODES_H_
 #define SPECIAL_OPCODES_H_
 
-#include "types.h"
+#include "../types.h"
+#include "emulator.h"
 
 extern uchar dcpu16_handle_opJSR(dcpu16_t *, uchar, dcpuw_t *);
 extern uchar dcpu16_handle_opINT(dcpu16_t *, uchar, dcpuw_t *);

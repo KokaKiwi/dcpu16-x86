@@ -1,5 +1,6 @@
-#include "emulator.h"
-#include "special_opcodes.h"
+#include "dcpu/emulator.h"
+#include "dcpu/dcpu_opcodes.h"
+#include "dcpu/special_opcodes.h"
 #include "types.h"
 
 uchar dcpu16_handle_opJSR(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
@@ -90,15 +91,15 @@ uchar dcpu16_handle_opHWQ(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
             && (hardware = &cpu->hardware[hardware_index])->present)
     {
         dcpu16_set(cpu, &cpu->registers[DCPU16_REG_A],
-                (dcpuw_t) (hardware->id & 0xffff));
+                (dcpuw_t) (hardware->descriptor.id & 0xffff));
         dcpu16_set(cpu, &cpu->registers[DCPU16_REG_B],
-                (dcpuw_t) ((hardware->id >> 16) & 0xffff));
+                (dcpuw_t) ((hardware->descriptor.id >> 16) & 0xffff));
         dcpu16_set(cpu, &cpu->registers[DCPU16_REG_C],
-                (dcpuw_t) hardware->version);
+                (dcpuw_t) hardware->descriptor.version);
         dcpu16_set(cpu, &cpu->registers[DCPU16_REG_X],
-                (dcpuw_t) (hardware->manufacturer & 0xffff));
+                (dcpuw_t) (hardware->descriptor.manufacturer & 0xffff));
         dcpu16_set(cpu, &cpu->registers[DCPU16_REG_Y],
-                (dcpuw_t) ((hardware->manufacturer >> 16) & 0xffff));
+                (dcpuw_t) ((hardware->descriptor.manufacturer >> 16) & 0xffff));
     }
     
     return 4;
@@ -111,13 +112,13 @@ uchar dcpu16_handle_opHWI(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
     dcpuw_t hardware_index;
     dcpu16_hardware_t *hardware;
     
-    hardware_index = cpu->registers[DCPU16_REG_A];
+    hardware_index = *aw;
     
     if (hardware_index >= 0 && hardware_index < DCPU16_HARDWARE_SLOTS
             && (hardware = &cpu->hardware[hardware_index])->present
-            && hardware->interrupt)
+            && hardware->descriptor.interrupt)
     {
-        cycles += hardware->interrupt(cpu, hardware);
+        cycles += hardware->descriptor.interrupt(cpu, hardware);
     }
     
     return cycles;

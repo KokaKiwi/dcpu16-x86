@@ -1,7 +1,7 @@
 #ifndef EMULATOR_H_
 #define EMULATOR_H_
 
-#include "types.h"
+#include "../types.h"
 
 typedef unsigned short dcpuw_t;
 typedef signed short dcpusw_t;
@@ -61,6 +61,7 @@ typedef signed short dcpusw_t;
 
 #define DCPU16_WORD(num)                    ((((num) & 0xff) << 8) + (((num) >> 8) & 0xff))
 
+typedef struct _dcpu16_hardware_descriptor_t dcpu16_hardware_descriptor_t;
 typedef struct _dcpu16_hardware_t dcpu16_hardware_t;
 typedef struct _dcpu16_interrupt_queue dcpu16_interrupt_queue;
 typedef struct _dcpu16_register_listener dcpu16_register_listener;
@@ -71,13 +72,19 @@ typedef uchar (*basic_opcode_handler)(dcpu16_t *, uchar, uchar, dcpuw_t *,
         dcpuw_t *);
 typedef uchar (*special_opcode_handler)(dcpu16_t *, uchar, dcpuw_t *);
 
-struct _dcpu16_hardware_t
+struct _dcpu16_hardware_descriptor_t
 {
-    uchar present;
     u32 id;
     u16 version;
     u32 manufacturer;
     int (*interrupt)(dcpu16_t *, dcpu16_hardware_t *);
+    void (*tick)(dcpu16_t *, dcpu16_hardware_t *);
+};
+
+struct _dcpu16_hardware_t
+{
+    uchar present;
+    dcpu16_hardware_descriptor_t descriptor;
     void *custom;
 }__attribute__((packed));
 

@@ -1,8 +1,10 @@
 export BOCHS	:= /usr/fbin/bochs
 export NASM		:= nasm
 export CC		:= gcc
-export CCFLAGS	:= -c -O3 -Os -g -nostartfiles -fno-builtin -Iinclude
-export CAFLAGS	:= -S -O3 -Os -nostartfiles -fno-builtin -Iinclude
+export INCDIRS  := include
+export CFLAGS   := -O3 -Os -nostartfiles -fno-builtin $(foreach incdir,$(INCDIRS),$(addprefix -I,$(incdir)))
+export CCFLAGS	:= -c -g $(CFLAGS)
+export CAFLAGS	:= -S $(CFLAGS)
 export OBJCOPY	:= objcopy
 export LD		:= ld
 export LDFLAGS	:= -g
