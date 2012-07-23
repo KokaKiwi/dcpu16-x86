@@ -7,7 +7,7 @@
 
 #ifdef HARDWARE_DESCRIPTORS             // Descriptors
 
-hardware(&debug_hardware)               // 0x00
+hardware(&keyboard_hardware)            // 0x00
 hardware(0)                             // 0x01
 hardware(0)                             // 0x02
 hardware(0)                             // 0x03
@@ -18,7 +18,7 @@ hardware(0)                             // 0x07
 
 #else                                   // Includes
 
-
+#include "hardware/keyboard.h"
 
 #endif
 

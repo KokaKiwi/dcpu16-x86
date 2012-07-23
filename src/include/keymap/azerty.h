@@ -1,5 +1,5 @@
-#ifndef QWERTY_H_
-#define QWERTY_H_
+#ifndef AZERTY_H
+#define AZERTY_H
 
 #include "../types.h"
 

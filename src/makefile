@@ -2,7 +2,7 @@ B                        := ../$(BUILDDIR)/
 S                        := $Basm/
 
 # New
-SRCDIRS                  := lib core
+SRCDIRS                  := lib core hardware
 
 include_srcdir_csrc      = $(1)_CSRC     := $(wildcard $(1)/*.c)
 include_srcdir_cobjs     = $(1)_COBJS    := $(addprefix $B,$(notdir $($(1)_CSRC:.c=$O)))

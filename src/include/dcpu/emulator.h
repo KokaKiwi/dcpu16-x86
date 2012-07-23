@@ -77,6 +77,7 @@ struct _dcpu16_hardware_descriptor_t
     u32 id;
     u16 version;
     u32 manufacturer;
+    void (*init)(dcpu16_t *, dcpu16_hardware_t *);
     int (*interrupt)(dcpu16_t *, dcpu16_hardware_t *);
     void (*tick)(dcpu16_t *, dcpu16_hardware_t *);
 };

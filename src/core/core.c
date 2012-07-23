@@ -10,28 +10,15 @@
 
 uchar dcpu16_running = 1;
 
-int debug_int(dcpu16_t *cpu, dcpu16_hardware_t *hw)
-{
-    println("INT");
-    show_cursor();
-    
-    return 1;
-}
-
-void debug_tick(dcpu16_t *cpu, dcpu16_hardware_t *hw)
-{
-    // Tick !
-}
-
-dcpu16_hardware_descriptor_t debug_hardware = { 0x01234567, 0x1234, 0x12345678,
-        debug_int, debug_tick };
-
 void kernel()
 {
     dcpu16_t *cpu = (dcpu16_t *) 0x100000;
     
     print("Initializing DCPU-16...");
     dcpu16_init(cpu);
+    ok_msg();
+    
+    print("Initializing DCPU-16 devices...");
     dcpu16_loadhardware(cpu);
     ok_msg();
     
@@ -83,6 +70,11 @@ void dcpu16_loadhardware(dcpu16_t *cpu)
         {
             cpu->hardware[i].descriptor = *hardwares[i];
             cpu->hardware[i].present = 1;
+            
+            if (hardwares[i]->init)
+            {
+                hardwares[i]->init(cpu, &cpu->hardware[i]);
+            }
         }
     }
 }

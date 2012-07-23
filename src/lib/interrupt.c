@@ -5,6 +5,7 @@
 #include "keyboard.h"
 #include "keymap.h"
 #include "color.h"
+#include "dcpu/hardware/keyboard.h"
 
 void (*keyhandler)(uchar) = 0;
 
@@ -67,6 +68,8 @@ void isr_keyboard_int()
     
     i = inb(0x60);
     i--;
+    
+    dcpu16_keyboard_keyhandler(i);
     
     if (i < 0x80)    // Pressed key
     {
