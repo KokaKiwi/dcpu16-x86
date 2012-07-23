@@ -14,6 +14,8 @@ uchar dcpu16_handle_opJSR(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 
 uchar dcpu16_handle_opINT(dcpu16_t *cpu, uchar a, dcpuw_t *aw)
 {
+    dcpu16_interrupt(cpu, *aw, 1);
+    
     return 4;
 }
 

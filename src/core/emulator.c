@@ -127,6 +127,51 @@ uchar dcpu16_get_pointer(dcpu16_t *cpu, uchar addr, dcpuw_t *tmp_storage,
     return cycles;
 }
 
+void dcpu16_register_ram_listener(dcpu16_t *cpu, dcpu16_ram_listener *listener)
+{
+    dcpu16_ram_listener *root;
+    
+    if (cpu->listeners.ram_listener)
+    {
+        root = cpu->listeners.ram_listener;
+        
+        root->prev->next = listener;
+        listener->prev = root->prev;
+        
+        root->prev = listener;
+        listener->next = root;
+    }
+    else
+    {
+        cpu->listeners.ram_listener = listener;
+        listener->next = listener;
+        listener->prev = listener;
+    }
+}
+
+void dcpu16_register_register_listener(dcpu16_t *cpu,
+        dcpu16_register_listener *listener)
+{
+    dcpu16_register_listener *root;
+    
+    if (cpu->listeners.register_listener)
+    {
+        root = cpu->listeners.register_listener;
+        
+        root->prev->next = listener;
+        listener->prev = root->prev;
+        
+        root->prev = listener;
+        listener->next = root;
+    }
+    else
+    {
+        cpu->listeners.register_listener = listener;
+        listener->next = listener;
+        listener->prev = listener;
+    }
+}
+
 void dcpu16_call_ram_listeners(dcpu16_t *cpu, dcpuw_t addr, dcpuw_t value)
 {
     dcpu16_ram_listener *root, *cur;
@@ -266,6 +311,55 @@ void dcpu16_skip_next_instruction(dcpu16_t *cpu)
         a = (opword >> 10) & 0x3f;
         
         dcpu16_get_pointer(cpu, a, 0, &aw, 1);
+    }
+}
+
+void dcpu16_interrupt(dcpu16_t *cpu, dcpuw_t msg, uchar software_interrupt)
+{
+    if (cpu->registers[DCPU16_REG_IA] || software_interrupt)
+    {
+        if (cpu->interrupt_queue.index < DCPU16_MAX_INTERRUPT_QUEUE_LENGTH)
+        {
+            cpu->interrupt_queue.stack[cpu->interrupt_queue.index++] = msg;
+        }
+        else
+        {
+            // Computer on fire!
+        }
+    }
+}
+
+void dcpu16_trigger_interrupt(dcpu16_t *cpu)
+{
+    dcpuw_t msg;
+    
+    if (cpu->interrupt_queue.index)
+    {
+        if (cpu->registers[DCPU16_REG_IA])
+        {
+            msg = cpu->interrupt_queue.stack[cpu->interrupt_queue.index--];
+            
+            // Push PC
+            cpu->ram[--cpu->registers[DCPU16_REG_SP]] =
+                    cpu->registers[DCPU16_REG_PC];
+            
+            // Push A
+            cpu->ram[--cpu->registers[DCPU16_REG_SP]] =
+                    cpu->registers[DCPU16_REG_A];
+            
+            // Set PC to IA
+            cpu->registers[DCPU16_REG_PC] = cpu->registers[DCPU16_REG_IA];
+            
+            // Set A to the interrupt message
+            cpu->registers[DCPU16_REG_A] = msg;
+            
+            // Disable interrupt triggering until this interrupt returns
+            cpu->interrupts_enabled = 0;
+        }
+        else
+        {
+            cpu->interrupt_queue.index--;
+        }
     }
 }
 

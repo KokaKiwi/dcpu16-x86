@@ -20,6 +20,9 @@ void kernel()
     print("Loading DCPU-16 program...");
     dcpu16_ramcpy(cpu, p, 0, size);
     ok_msg();
+    
+    println("Starting DCPU-16...");
+
     show_cursor();
     
     while(1)

@@ -62,7 +62,6 @@ typedef signed short dcpusw_t;
 #define DCPU16_WORD(num)                    ((((num) & 0xff) << 8) + (((num) >> 8) & 0xff))
 
 typedef struct _dcpu16_hardware_t dcpu16_hardware_t;
-typedef struct _dcpu16_queued_interrupt_t dcpu16_queued_interrupt_t;
 typedef struct _dcpu16_interrupt_queue dcpu16_interrupt_queue;
 typedef struct _dcpu16_register_listener dcpu16_register_listener;
 typedef struct _dcpu16_ram_listener dcpu16_ram_listener;
@@ -82,16 +81,10 @@ struct _dcpu16_hardware_t
     void *custom;
 }__attribute__((packed));
 
-struct _dcpu16_queued_interrupt_t
-{
-    dcpuw_t message;
-    dcpu16_queued_interrupt_t *next, *prev;
-};
-
 struct _dcpu16_interrupt_queue
 {
-    dcpu16_queued_interrupt_t root;
-    unsigned short size;
+    dcpuw_t stack[DCPU16_MAX_INTERRUPT_QUEUE_LENGTH];
+    u8 index;
 };
 
 struct _dcpu16_register_listener
@@ -135,6 +128,9 @@ extern void dcpu16_set(dcpu16_t *, dcpuw_t *, dcpuw_t);
 extern dcpuw_t *dcpu16_register_pointer(dcpu16_t *, uchar);
 extern uchar dcpu16_get_pointer(dcpu16_t *, uchar, dcpuw_t *, dcpuw_t **, uchar);
 
+extern void dcpu16_register_ram_listener(dcpu16_t *, dcpu16_ram_listener *);
+extern void dcpu16_register_register_listener(dcpu16_t *,
+        dcpu16_register_listener *);
 extern void dcpu16_call_ram_listeners(dcpu16_t *, dcpuw_t, dcpuw_t);
 extern void dcpu16_call_register_listeners(dcpu16_t *, uchar, dcpuw_t);
 
@@ -142,6 +138,8 @@ extern void dcpu16_init(dcpu16_t *);
 extern void dcpu16_ramcpy(dcpu16_t *, dcpuw_t *, dcpuw_t, size_t);
 extern unsigned char dcpu16_step(dcpu16_t *);
 extern void dcpu16_skip_next_instruction(dcpu16_t *);
+
+extern void dcpu16_interrupt(dcpu16_t *, dcpuw_t, uchar);
 extern void dcpu16_trigger_interrupt(dcpu16_t *);
 
 extern void dcpu16_printreg(dcpu16_t *, char *, char, char);
