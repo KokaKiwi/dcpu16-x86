@@ -36,7 +36,7 @@ compile                  : $Bkernel
 $Bkernel                 : $Bkernel.out ; $(OBJCOPY) -O binary $^ $@
 
 #$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -static -o $@ -Llibs -lkernel $Bkernel$O $Bprogram$O $(ALL_OBJS)
-$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -o $@ $Bkernel$O $Bprogram$O $(ALL_OBJS) $(LIBS)
+$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(CC) $(CFLAGS) -s -static -o $@ -Llibs -lkernel $Bkernel$O $Bprogram$O $(ALL_OBJS)
 
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_c,$(srcdir))))
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_a,$(srcdir))))
