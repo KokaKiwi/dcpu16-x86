@@ -11,6 +11,7 @@ extern u8 screenX;
 extern u8 screenY;
 extern char mask;
 
+// Text mode
 extern void scroll(unsigned int);
 extern void clear_screen(void);
 extern void move_cursor(u8, u8);

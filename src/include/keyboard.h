@@ -5,6 +5,6 @@
 
 extern uchar keymap[];
 
-extern void (*keyhandler)(uchar);
+extern void (*keyhandler)(uchar, uchar);
 
 #endif

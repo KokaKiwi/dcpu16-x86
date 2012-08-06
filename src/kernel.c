@@ -20,8 +20,6 @@ void load_idt(void);
 void _main(struct multiboot_info *mbi)
 {
     clear_screen();
-    screenX = 0;
-    screenY = 0;
     hide_cursor();
     
     // Boot

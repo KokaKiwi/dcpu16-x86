@@ -99,5 +99,5 @@ dcpuw_t dcpu16_keyboard_keyconvert(uchar c)
     return code;
 }
 
-dcpu16_hardware_descriptor_t keyboard_hardware = { 0x30cf7406, 0x0001,
+dcpu16_hardware_descriptor_t dcpu16_keyboard_hardware = { 0x30cf7406, 0x0001,
         0x12345678, dcpu16_keyboard_init, dcpu16_keyboard_interrupt, 0 };

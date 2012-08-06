@@ -2,7 +2,8 @@ B                        := ../$(BUILDDIR)/
 S                        := $Basm/
 
 # New
-SRCDIRS                  := lib core hardware
+SRCDIRS                  := core hardware
+LIBS                     := $(wildcard libs/*.a)
 
 include_srcdir_csrc      = $(1)_CSRC     := $(wildcard $(1)/*.c)
 include_srcdir_cobjs     = $(1)_COBJS    := $(addprefix $B,$(notdir $($(1)_CSRC:.c=$O)))
@@ -34,7 +35,8 @@ compile                  : $Bkernel
 
 $Bkernel                 : $Bkernel.out ; $(OBJCOPY) -O binary $^ $@
 
-$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -o $@ $Bkernel$O $Bprogram$O $(ALL_OBJS)
+#$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -static -o $@ -Llibs -lkernel $Bkernel$O $Bprogram$O $(ALL_OBJS)
+$Bkernel.out             : $Bboot$O $Bkernel$O $Bprogram$O $(ALL_OBJS) ; $(LD) -T kernel.ld -s -o $@ $Bkernel$O $Bprogram$O $(ALL_OBJS) $(LIBS)
 
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_c,$(srcdir))))
 $(foreach srcdir,$(SRCDIRS),$(eval $(call compile_srcdir_a,$(srcdir))))

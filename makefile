@@ -1,4 +1,5 @@
-export BOCHS	:= /usr/fbin/bochs
+export BOCHS	:= /usr/fbin/bochs/bochs
+export QEMU     := /usr/fbin/qemu
 export NASM		:= nasm
 export CC		:= gcc
 export INCDIRS  := include
@@ -18,7 +19,6 @@ S				:= $Basm/
 OBJS			:= $Bbootsect $Bkernel
 
 compile			: bootsect kernel floppy
-run 			: bochs
 
 # Compile
 # + Bootsect
@@ -39,8 +39,11 @@ floppy			: floppyA
 
 floppyA			: $(OBJS) ; cat $(OBJS) /dev/zero | dd of=floppyA bs=512 count=2880
 
+# QEmu
+run-qemu		:
+	$(QEMU)/qemu-system-i386 -fda floppyA
 # Bochs
-bochs			:
+run-bochs		:
 	$(BOCHS) -f bochsrc.bxrc
 	
 # Clean
