@@ -1,5 +1,5 @@
 global _start, start
-extern __main
+extern _main
     
 %define MULTIBOOT_HEADER_MAGIC  0x1BADB002
 %define MULTIBOOT_HEADER_FLAGS  0x00000003
@@ -21,7 +21,7 @@ dd CHECKSUM
 
 start:
     push ebx
-    call __main
+    call _main
 
     cli ; stop interrupts
     hlt ; halt the CPU
