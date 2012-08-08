@@ -27,8 +27,15 @@ bootsect:
 	make -C boot
 
 # + Kernel
+libs            := $(wildcard src/libs/*.tar)
+
+untar_lib       := tar -xf $(1) -C src/libs/
+
 kernel		:
+	$(foreach lib,$(libs),tar -xf $(lib) -C src/libs/)
 	make -C src compile
+	rm -f src/libs/*.c
+	rm -f src/libs/*.asm
 
 asm			:
 	mkdir -p $S

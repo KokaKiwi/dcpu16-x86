@@ -81,3 +81,32 @@ void load_idt()
     init_idt();
     ok_msg();
 }
+
+void putchar(char c)
+{
+    char *vram = (char *) (RAMSCREEN + 2 * screenX + 160 * screenY);
+    switch (c)
+    {
+        case '\n':
+            screenX = 0;
+            screenY++;
+            break;
+        case 9:
+            screenX = screenX + 8 - (screenX % 8);
+            break;
+        case 13:
+            screenX = 0;
+            break;
+        default:
+            *vram = c;
+            *(vram + 1) = mask;
+
+            screenX++;
+            if (screenX > 79)
+            {
+                screenX = 0;
+                screenY++;
+            }
+            break;
+    }
+}
